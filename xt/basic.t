@@ -24,7 +24,7 @@ my $DisplayUrl = "/Ticket/Display.html?id=" . $ticket->id;
 $m->get_ok($DisplayUrl, "Fetched $DisplayUrl");
 ok( $m->find_link( text => 'Home' ), 'Home link found' );
 ok( $m->find_link( text => 'Customised Menu Foo' ), 'Customised Menu Foo link found' );
-ok( !$m->find_link( text => 'Tools' ), 'Tools link not found' );
+ok( !$m->find_link( text => 'Tools', url_abs => '/Tools/index.html' ), 'Tools link not found' );
 
 undef $m;
 
