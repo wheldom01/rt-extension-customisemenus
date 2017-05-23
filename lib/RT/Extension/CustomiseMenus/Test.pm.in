@@ -1,0 +1,72 @@
+# (c) Martin Wheldon
+# Info: https://github.com/wheldom01/rt-extension-customisemenus
+#
+# This code is free software; you can redistribute it and/or
+# modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or any later version.
+#
+# This code is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU AFFERO GENERAL PUBLIC LICENSE for more details.
+#
+# You should have received a copy of the GNU Affero General Public
+# License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#
+
+use strict;
+use warnings;
+
+### after: use lib qw(@RT_LIB_PATH@);
+use lib qw(/opt/rt4/local/lib /opt/rt4/lib);
+
+package RT::Extension::CustomiseMenus::Test;
+
+our @ISA;
+BEGIN {
+    local $@;
+    eval { require RT::Test; 1 } or do {
+        require Test::More;
+        Test::More::BAIL_OUT(
+            "requires 3.8 to run tests. Error:\n$@\n"
+            ."You may need to set PERL5LIB=/path/to/rt/lib"
+        );
+    };
+    push @ISA, 'RT::Test';
+}
+
+sub import {
+    my $class = shift;
+    my %args  = @_;
+
+    $args{'requires'} ||= [];
+    if ( $args{'testing'} ) {
+        unshift @{ $args{'requires'} }, 'RT::Extension::CustomiseMenus';
+    } else {
+        $args{'testing'} = 'RT::Extension::CustomiseMenus';
+    }
+
+    $args{'config'} =<<CONFIG;
+Set(\$PrivilegedMenus, [
+            {
+                    'id'     => 'bar',
+                    'action' => 'add',
+                    'path'   => 'foo/bar',
+                    'title'  => 'Customised Menu Foo',
+                    'menu'   => 'main',
+                    'after'  => 'home',
+            },
+]);
+Set(\$SelfServiceMenus, [
+]);
+CONFIG
+
+    $class->SUPER::import( %args );
+    $class->export_to_level(1);
+
+    require RT::Extension::CustomiseMenus;
+}
+
+1;

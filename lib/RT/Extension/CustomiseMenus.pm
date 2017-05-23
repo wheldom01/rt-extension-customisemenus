@@ -6,18 +6,16 @@ our $VERSION = '0.01';
 
 =head1 NAME
 
-RT-Extension-CustomiseMenus - [One line description of module's purpose here]
+RT-Extension-CustomiseMenus - enables easy modification of RT menus
 
 =head1 DESCRIPTION
 
-[Why would someone install this extension? What does it do? What problem
-does it solve?]
+This extension for RT allows a administrator to easily add/remove/rename
+the RT menus.
 
 =head1 RT VERSION
 
-Works with RT [What versions of RT is this known to work with?]
-
-[Make sure to use requires_rt and rt_too_new in Makefile.PL]
+Works with RT 4.4
 
 =head1 INSTALLATION
 
@@ -33,15 +31,9 @@ May need root permissions
 
 =item Edit your F</opt/rt4/etc/RT_SiteConfig.pm>
 
-If you are using RT 4.2 or greater, add this line:
+Adding this line:
 
     Plugin('RT::Extension::CustomiseMenus');
-
-For RT 4.0, add this line:
-
-    Set(@Plugins, qw(RT::Extension::CustomiseMenus));
-
-or add C<RT::Extension::CustomiseMenus> to your existing C<@Plugins> line.
 
 =item Clear your mason cache
 
@@ -50,6 +42,47 @@ or add C<RT::Extension::CustomiseMenus> to your existing C<@Plugins> line.
 =item Restart your webserver
 
 =back
+
+=head1 CONFIGURATION
+
+A RT menu can be manipluated by adding a simple configuration
+array of hashes as shown below:
+
+    Set($PrivilegedMenus, [
+                {
+                        'id'     => 'corporate',
+                        'action' => 'add',
+                        'path'   => 'http://bestpractical.com',
+                        'title'  => 'Corporate',
+                        'menu'   => 'main',
+                        'after'  => 'home',
+                },
+                {
+                        'id'     => 'wiki',
+                        'action' => 'add',
+                        'path'   => 'http://wiki.bestpractical.com',
+                        'title'  => 'Wiki',
+                        'menu'   => 'main',
+                        'parent' => 'corporate',
+                },
+                {
+                        'id'     => 'newitem',
+                        'action' => 'add',
+                        'path'   => '/new/thing/here',
+                        'title'  => 'New Action',
+                        'menu'   => 'tabs',
+                        'parent' => 'actions',
+                },
+                {
+                        'id'     => 'tools',
+                        'action' => 'remove',
+                        'menu'   => 'main',
+                },
+    ]);
+
+    Set($SelfServiceMenus, [
+
+    ]);
 
 =head1 AUTHOR
 
@@ -74,5 +107,75 @@ This is free software, licensed under:
   The GNU General Public License, Version 2, June 1991
 
 =cut
+
+use Exporter 'import';
+
+our @EXPORT = qw/ add_menu_item remove_menu_item /;
+
+sub load_menu
+{
+    my ($config) = shift;
+
+    my $menu = {};
+
+    # Load the appropriate submenu
+    if (exists $config->{parent}) {
+        my $parent = $config->{parent};
+
+        $menu = HTML::Mason::Commands::Menu()->child($parent) if $config->{menu} eq "main";
+        $menu = HTML::Mason::Commands::PageMenu()->child($parent) if $config->{menu} eq "tabs";
+    }
+    # Load the appropriate root menu
+    else {
+        $menu = HTML::Mason::Commands::Menu() if $config->{menu} eq "main";
+        $menu = HTML::Mason::Commands::PageMenu() if $config->{menu} eq "tabs";
+    }
+
+    return $menu;
+
+}
+
+sub add_menu_item
+{
+    my ($config) = shift;
+
+    my $id = $config->{id};
+    my $menu = &load_menu($config);
+
+    # FIXME: Could be add permissions here???
+    #        was thinking of adding those to the anonymous hash
+    # If we have a valid menu object then try to add the new menu item
+    if ($menu) {
+        if ( not $menu->child($id,
+                                title   => HTML::Mason::Commands::loc($config->{title}),
+                                path    => HTML::Mason::Commands::loc($config->{path}),
+                                )) {
+            $RT::Logger->error("Failed to add menu item $id");
+        }
+    }
+    else {
+        $RT::Logger->error("Failed to load parent menu of item $id");
+    }
+
+}
+
+sub remove_menu_item
+{
+    my ($config) = shift;
+
+    my $id = $config->{id};
+    my $menu = &load_menu($config);
+
+    # If we have a valid menu object then try to delete the menu item
+    if ($menu) {
+        if (not $menu->delete($id)) {
+            $RT::Logger->error("Failed to remove menu item $id");
+        }
+    }
+    else {
+        $RT::Logger->error("Failed to load parent menu of item $id");
+    }
+
+}
 
 1;

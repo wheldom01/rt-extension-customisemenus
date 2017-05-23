@@ -1,0 +1,85 @@
+NAME
+    RT-Extension-CustomiseMenus - enables easy modification of RT menus
+
+DESCRIPTION
+    This extension for RT allows a administrator to easily add/remove/rename
+    the RT menus.
+
+RT VERSION
+    Works with RT 4.4
+
+INSTALLATION
+    perl Makefile.PL
+    make
+    make install
+        May need root permissions
+
+    Edit your /opt/rt4/etc/RT_SiteConfig.pm
+        Adding this line:
+
+            Plugin('RT::Extension::CustomiseMenus');
+
+    Clear your mason cache
+            rm -rf /opt/rt4/var/mason_data/obj
+
+    Restart your webserver
+
+CONFIGURATION
+    A RT menu can be manipluated by adding a simple configuration array of
+    hashes as shown below:
+
+        Set($PrivilegedMenus, [
+                    {
+                            'id'     => 'corporate',
+                            'action' => 'add',
+                            'path'   => 'http://bestpractical.com',
+                            'title'  => 'Corporate',
+                            'menu'   => 'main',
+                            'after'  => 'home',
+                    },
+                    {
+                            'id'     => 'wiki',
+                            'action' => 'add',
+                            'path'   => 'http://wiki.bestpractical.com',
+                            'title'  => 'Wiki',
+                            'menu'   => 'main',
+                            'parent' => 'corporate',
+                    },
+                    {
+                            'id'     => 'newitem',
+                            'action' => 'add',
+                            'path'   => '/new/thing/here',
+                            'title'  => 'New Action',
+                            'menu'   => 'tabs',
+                            'parent' => 'actions',
+                    },
+                    {
+                            'id'     => 'tools',
+                            'action' => 'remove',
+                            'menu'   => 'main',
+                    },
+        ]);
+
+        Set($SelfServiceMenus, [
+
+        ]);
+
+AUTHOR
+    Best Practical Solutions, LLC <modules@bestpractical.com>
+
+BUGS
+    All bugs should be reported via email to
+
+        L<bug-RT-Extension-CustomiseMenus@rt.cpan.org|mailto:bug-RT-Extension-CustomiseMenus@rt.cpan.org>
+
+    or via the web at
+
+        L<rt.cpan.org|http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-CustomiseMenus>.
+
+LICENSE AND COPYRIGHT
+    This software is Copyright (c) 2017 by Greenhills IT Ltd.
+
+    This is free software, licensed under:
+
+      The GNU General Public License, Version 2, June 1991
+

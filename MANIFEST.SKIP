@@ -1,0 +1,21 @@
+# Don't install temp files
+\.bak$
+\.swp$
+
+# Ignore version control files
+\bRCS\b
+\bCVS\b
+\bSCCS\b
+,v$
+\B\.svn\b
+\B\.git\b
+\B\.gitignore\b
+gitignore\b
+\b_darcs\b
+
+# Ignore tmp test directory
+xt/tmp\b
+
+# Don't install test framework
+lib/RT/Extension/CustomiseMenus/Test.pm.in$
+lib/RT/Extension/CustomiseMenus/Test.pm$
