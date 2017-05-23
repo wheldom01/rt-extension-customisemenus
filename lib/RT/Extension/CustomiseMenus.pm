@@ -86,17 +86,13 @@ array of hashes as shown below:
 
 =head1 AUTHOR
 
-Best Practical Solutions, LLC E<lt>modules@bestpractical.comE<gt>
+Martin Wheldon E<lt>martin.wheldon@greenhills-it.co.ukE<gt>
 
 =head1 BUGS
 
 All bugs should be reported via email to
 
-    L<bug-RT-Extension-CustomiseMenus@rt.cpan.org|mailto:bug-RT-Extension-CustomiseMenus@rt.cpan.org>
-
-or via the web at
-
-    L<rt.cpan.org|http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-CustomiseMenus>.
+    L<bug-RT-Extension-CustomiseMenus@greenhills-it.co.uk|mailto:bug-RT-Extension-CustomiseMenus@greenhills-it.co.uk>
 
 =head1 LICENSE AND COPYRIGHT
 

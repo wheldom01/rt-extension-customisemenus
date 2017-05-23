@@ -1,7 +1,7 @@
 ---
 abstract: 'RT-Extension-CustomiseMenus Extension'
 author:
-  - 'Best Practical Solutions, LLC <modules@bestpractical.com>'
+  - 'Martin Wheldon <martin.wheldon@greenhills-it.co.uk>'
 build_requires:
   ExtUtils::MakeMaker: 6.59
 configure_requires:

@@ -65,16 +65,12 @@ CONFIGURATION
         ]);
 
 AUTHOR
-    Best Practical Solutions, LLC <modules@bestpractical.com>
+    Martin Wheldon <martin.wheldon@greenhills-it.co.uk>
 
 BUGS
     All bugs should be reported via email to
 
-        L<bug-RT-Extension-CustomiseMenus@rt.cpan.org|mailto:bug-RT-Extension-CustomiseMenus@rt.cpan.org>
-
-    or via the web at
-
-        L<rt.cpan.org|http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-CustomiseMenus>.
+        L<bug-RT-Extension-CustomiseMenus@greenhills-it.co.uk|mailto:bug-RT-Extension-CustomiseMenus@greenhills-it.co.uk>
 
 LICENSE AND COPYRIGHT
     This software is Copyright (c) 2017 by Greenhills IT Ltd.
